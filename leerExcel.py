@@ -1,5 +1,6 @@
 import pandas as pd
 import xlrd
+import xlwt
 
 archivo_excel = pd.read_excel('clavesoki.xlsx')
 print(archivo_excel.columns)
