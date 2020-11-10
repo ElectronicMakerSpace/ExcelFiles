@@ -70,11 +70,12 @@ for i in range(columnas):
             wb.save('OKIData.xlsx')
 
         else:
-            print(Style.RESET_ALL)
-            print("Buscado clave...")
+            #print(Style.RESET_ALL)
+            #print("Buscado clave...")
+            pass
 
         print(Style.RESET_ALL)
-        if contador in tqdm (range (rango), desc="Loading..."):
+        if contador in tqdm (range (rango), desc="Procesando Informacion..."):
             pass
             #time.sleep(0.1)
         #    contador += 1
