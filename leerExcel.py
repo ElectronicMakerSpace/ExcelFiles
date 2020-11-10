@@ -9,8 +9,8 @@ print(archivo_excel.columns)
 cadena = "Starter Kit,Board&Shield,Sensor&Module,Relay Module,Display,Car Robot,For MICRO BIT,Servo,For Raspberry PI,Spare Part "
 columnas = cadena.split(",")
 
-#df_seleccionados = archivo_excel[columnas]
-#print(df_seleccionados)
+df_seleccionados = archivo_excel[columnas]
+print(df_seleccionados)
 
 documento = xlrd.open_workbook("clavesoki.xlsx")
 claves = documento.sheet_by_index(0)
