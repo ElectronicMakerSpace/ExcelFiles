@@ -1,5 +1,4 @@
 from colorama import init, Fore, Back, Style
-from bs4 import BeautifulSoup
 from datetime import datetime
 import requests, math
 from tqdm import tqdm 
@@ -7,36 +6,44 @@ import xlrd, xlwt
 from os import system
 import os
 
-def num_paginas(resultados):
-                #for resultado in resultados:
-                sin_espacios = resultados[0].getText().strip().split()
-                #print(f' Texto: {sin_espacios}, tipo{type(sin_espacios)}')
-                inicio = int(sin_espacios[2])
-                fin = int(sin_espacios[4])
 
-                if inicio <=0 or fin <= 0:
-                    paginas = 0
-                else:
-                    paginas = math.ceil(fin / inicio)
+def identificar_excel(archivos):
+    archivos_excel = []
+    for archivo in archivos:
+        nombre_archivo, extension_archivo = os.path.splitext(archivo)
+        #print(f'nombre_archivo: {nombre_archivo}, extension_archivo: {extension_archivo}, tipo: {type(extension_archivo)}')
+        if extension_archivo == e_principal or extension_archivo == e_alterna:
+            #print(f'Archivo a leer: {archivo}')
+            archivos_excel.append(archivo)
+    
+    return archivos_excel
 
-                #print(f'{inicio}, {fin} tipo inicio: {type(inicio)}')
-                return inicio, fin, paginas
+def crear_directorio(carpeta):
+    if not os.path.exists(carpeta):
+        os.makedirs(carpeta)
+        print(f'Carpeta "{carpeta}" creada')
+        return carpeta
+    else:
+        print(f'Carpeta "{carpeta}" Ya existe')
+        return carpeta
 
-directorio = "Resultados"
-salida = "OKIData.xlsx"
+#directorio = crear_directorio("Resultados")
+salida = "palabras.xlsx"
 
-if not os.path.exists(directorio):
-    os.makedirs(directorio)
-    print(f'Carpeta "{directorio}" creada')
-else:
-    print(f'Carpeta "{directorio}" Ya existe')
-
+# Inicio de colores
 init()
 
-archivo = "clavesoki_2020-12"
+actual_dir = os.path.dirname(__file__)
+archivos = os.listdir(actual_dir)
+e_principal = '.xlsx'
+e_alterna = '.xls'
 contador = 1
 
-documento = xlrd.open_workbook(f"{archivo}.xlsx")
+# Buscando archivos de excel
+excel = identificar_excel(archivos)
+archivo = excel[1]
+
+documento = xlrd.open_workbook(archivo)
 claves = documento.sheet_by_index(0)
 
 filas = claves.nrows
@@ -48,10 +55,10 @@ rango = (filas * columnas)
 style0 = xlwt.easyxf('font: name Times New Roman, color-index red, bold on',num_format_str='#,##0.00')
 
 wb = xlwt.Workbook()
-ws = wb.add_sheet('Resultados OKY')
+ws = wb.add_sheet('Resultados Palabras')
 
-for i in range(columnas):
-    for j in range(filas):
+for i in range(filas):
+    for j in range(columnas):
         #print(f'{j},{i}')
         contenido_celda = claves.cell_value(j,i)
 
@@ -75,7 +82,7 @@ for i in range(columnas):
                 #print(f'La clave: {contenido_celda} ya esta en el Stock')
                 ws.write(j, i, contenido_celda)
             
-            wb.save('{0}/{1}'.format(directorio, salida))
+            wb.save('Resultados/OKIData.xlsx')
 
         else:
             #print(Style.RESET_ALL)
